@@ -1,0 +1,28 @@
+﻿<Window x:Class="ChatClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Closing="Winsdow_Closing">
+    <Grid Loaded="Window_Loaded">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="165*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="37.953"/>
+            <ColumnDefinition Width="134*"/>
+            <ColumnDefinition Width="41*"/>
+            <ColumnDefinition Width="406*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="textboxUserName" HorizontalAlignment="Left" Height="46" Margin="16,34,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="593" Grid.ColumnSpan="4" Grid.Column="5"/>
+        <Button x:Name="buttonConnDicconn" Click="Button_Click" Content="Connect" HorizontalAlignment="Center" Height="46" Margin="0,34,0,0" VerticalAlignment="Top" Width="194" Grid.Column="3"/>
+        <ListBox x:Name="listboxChat" HorizontalAlignment="Left" Height="231" VerticalAlignment="Center" Width="780" Grid.ColumnSpan="7" Grid.Column="2"/>
+        <TextBox x:Name="textboxMessage" HorizontalAlignment="Left" Height="67" Margin="0,338,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="780" Grid.ColumnSpan="7" Grid.Column="2" KeyDown="textboxMessage_KeyDown"/>
+
+    </Grid>
+</Window>
