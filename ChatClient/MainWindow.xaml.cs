@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ChatClient.ServiceChat;
+using static ChatClient.MainWindow;
 namespace ChatClient
 {
     public partial class MainWindow : Window, IServiceChatCallback
@@ -43,12 +44,24 @@ namespace ChatClient
             buttonConnDicconn.Content = "Connect";
         }
 
+        public class User
+        {
+            public UserId Id { get; }
+            public string Name { get; }
+
+            public User(string name)
+            {
+                Name = name;
+                Id = new UserId(name.GetHashCode());
+            }
+        }
         void ConnectUser()
         {
             if (!isConnected)
             {
                 client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this));
-                userId = new UserId(client.Connect(textboxUserName.Text)); 
+                var user = new User(textboxUserName.Text);
+                userId = user.Id;
                 ChangeButtonToDisconnect();
                 isConnected = true;
             }
@@ -84,7 +97,7 @@ namespace ChatClient
             listboxChat.Items.Add(message);
             listboxChat.ScrollIntoView(listboxChat.Items[listboxChat.Items.Count - 1]);
         }
-
+        
         private void Winsdow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
