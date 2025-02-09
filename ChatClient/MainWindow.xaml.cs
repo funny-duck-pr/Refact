@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using ChatClient.ServiceChat;
 namespace ChatClient
 {
-    public partial class MainWindow : Window , IServiceChatCallback
+    public partial class MainWindow : Window, IServiceChatCallback
     {
         bool isConnected = false;
         ServiceChatClient client;
@@ -31,17 +31,26 @@ namespace ChatClient
 
         }
 
+        void ChangeButtonToDisconnect()
+        {
+            textboxUserName.IsEnabled = false;
+            buttonConnDicconn.Content = "Disconnect";
+        }
+
+        void ChangeButtonToConnect()
+        {
+            textboxUserName.IsEnabled = true;
+            buttonConnDicconn.Content = "Connect";
+        }
+
         void ConnectUser()
         {
-            if(!isConnected)
+            if (!isConnected)
             {
                 client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this));
-                Id = client.Connect(textboxUserName.Text);
-                string userName = textboxUserName.Text;
-                textboxUserName.IsEnabled = false;
-                buttonConnDicconn.Content = "Disconnect";
+                userId = new UserId(client.Connect(textboxUserName.Text)); 
+                ChangeButtonToDisconnect();
                 isConnected = true;
-
             }
         }
 
@@ -49,12 +58,10 @@ namespace ChatClient
         {
             if (isConnected)
             {
-                client.Disconnect(Id);
+                client.Disconnect(userId); 
                 client = null;
-                textboxUserName.IsEnabled = true;
-                buttonConnDicconn.Content = "Connect";
+                ChangeButtonToConnect();
                 isConnected = false;
-
             }
         }
 
@@ -75,7 +82,7 @@ namespace ChatClient
         public void MessageCallBack(string message)
         {
             listboxChat.Items.Add(message);
-            listboxChat.ScrollIntoView(listboxChat.Items[listboxChat.Items.Count-1]);
+            listboxChat.ScrollIntoView(listboxChat.Items[listboxChat.Items.Count - 1]);
         }
 
         private void Winsdow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -96,7 +103,7 @@ namespace ChatClient
             }
         }
 
-        
+
 
 
     }
