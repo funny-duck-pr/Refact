@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ChatClient.ServiceChat;
+using static ChatClient.MainWindow;
 namespace ChatClient
 {
     public partial class MainWindow : Window, IServiceChatCallback
@@ -43,12 +44,24 @@ namespace ChatClient
             buttonConnDicconn.Content = "Connect";
         }
 
+        public class User
+        {
+            public UserId Id { get; }
+            public string Name { get; }
+
+            public User(string name)
+            {
+                Name = name;
+                Id = new UserId(name.GetHashCode());
+            }
+        }
         void ConnectUser()
         {
             if (!isConnected)
             {
                 client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this));
-                userId = new UserId(client.Connect(textboxUserName.Text)); 
+                var user = new User(textboxUserName.Text);
+                userId = user.Id;
                 ChangeButtonToDisconnect();
                 isConnected = true;
             }
@@ -79,11 +92,31 @@ namespace ChatClient
 
         }
 
-        public void MessageCallBack(string message)
+        public class ChatMessage
         {
-            listboxChat.Items.Add(message);
+            public string Message { get; set; }
+            public DateTime Timestamp { get; set; }
+            public string Author { get; set; }
+
+            public ChatMessage(string message, string author)
+            {
+                Message = message;
+                Author = author;
+                Timestamp = DateTime.Now;
+            }
+
+            public override string ToString()
+            {
+                return $"{Timestamp.ToShortTimeString()} {Author}: {Message}";
+            }
+        }
+
+        public void MessageCallBack(ChatMessage chatMessage)
+        {
+            listboxChat.Items.Add(chatMessage);
             listboxChat.ScrollIntoView(listboxChat.Items[listboxChat.Items.Count - 1]);
         }
+
 
         private void Winsdow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -97,14 +130,11 @@ namespace ChatClient
             {
                 if (client != null)
                 {
-                    client.SendMessage(textboxMessage.Text, Id);
+                    var chatMessage = new ChatMessage(textboxMessage.Text, "Username");
+                    client.SendMessage(chatMessage.Message, userId);
                     textboxMessage.Text = string.Empty;
                 }
             }
         }
-
-
-
-
     }
 }
